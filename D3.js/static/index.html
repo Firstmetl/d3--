@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/mdui.min.css">
+    <script src="./js/d3.min.js"></script>
+    <script src="./js/mdui.min.js"></script>
+    <script src="./js/cityPos.js"></script>
+    <script src="./js/bubble.js"></script>
+    <style type="text/css">
+        .tooltip {
+            font-family: simsun;
+            font-size: 16px;
+            width: 120;
+            height: auto;
+            position: absolute;
+            text-align: center;
+            border-style: solid;
+            border-width: 1px;
+            background-color: white;
+            border-radius: 5px;
+            padding: 20px 10px;
+        }
+        
+        #line {
+            width: 400px;
+            height: 300px;
+        }
+        
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke: #000;
+            shape-rendering: crispEdges;
+        }
+        
+        .axis text {
+            font: 10px sans-serif;
+        }
+        
+        .main {
+            display: flex;
+        }
+        
+        .main .map {
+            flex: 1
+        }
+        
+        .main .right {
+            width: 500px;
+        }
+        
+        #header {
+            text-align: center;
+        }
+    </style>
+    <title>数据可视化</title>
+    <link rel="icon" href="./icon/heart_favorite_favourite_14030.ico">
+</head>
+
+<body id="body" class="mdui-color-teal-50 mdui-container">
+    <div class="mdui-center mdui" style="padding-top: 20px;">
+        <div>
+            <br>
+            <h1 class="mdui-text-color-theme mdui-text-center">空气质量数据可视化&nbsp;&nbsp;&nbsp;&nbsp; <small class="mdui-text-color-theme-secondary ">Tableau、D3.js</small></h1>
+            <br>
+            <hr>
+        </div>
+    </div>
+
+    <div class="mdui-container">
+        <div class="mdui-tab  mdui-tab-full-width" mdui-tab>
+            <a href="#data1 " class="mdui-ripple mdui-color-blue-200 ">全国空气质量</a>
+            <a href="#data2" class="mdui-ripple mdui-color-blue-200">全国气温</a>
+            <a href="#data3 " class="mdui-ripple mdui-color-blue-200">全国植被</a>
+        </div>
+    </div>
+    <div id="data1" class="mdui-container ">
+        <h2 style="font-weight: 400;color: #354;padding-top: 10px;" class="mdui-text-center">全国空气质量可视化展示</h2>
+        <button onclick="window.open('./air.html')">展示界面</button>
+        <h2 id="header">指标</h2>
+        <div class="main">
+            <div class="map">
+                <label>
+                    <b>指标</b>
+                    <select class="form-control" id="indicator"></select>
+                </label>
+            </div>
+        </div>
+        <div class="right " style="float: left; ">
+            <h2>按城市统计时间折线图</h2>
+            <label>
+                <b>城市</b>
+                <select class="form-control" id="city"></select>
+            </label>
+            <div id="line" class="right"></div>
+        </div>
+        <div style="float: right;">
+            <h2>气泡图</h2>
+            <div id="bubble"></div>
+        </div>
+        <div class="bottom" style="float: left; width: 120%;">
+            <h2>日历图</h2>
+            <div id="calendar" style="width: 125%;"></div>
+        </div>
+
+    </div>
+
+    <div id="data2" class="mdui-container">
+        <h2 style="font-weight: 400;color: #354;padding-top: 10px;" class="mdui-text-center">全国气温数据展示</h2>
+        <div class="mdui-tab  mdui-tab-full-width" mdui-tab>
+            <a href="#map2-1">温度数据省级地图</a>
+            <a href="#line2">温度数据折线图</a>
+        </div>
+        <div id="map2-1">
+            <h2 class="mdui-text-center">气温地图</h2>
+            <div id="temp-map"></div>
+        </div>
+
+        <div class="container" id="line2">
+            <h2 class="mdui-text-center">逐日气温</h2>
+            <label>
+                    <b>城市</b>
+                    <select class="form-control" id="city-temp"></select>
+                </label>
+            <div id="temp-line"></div>
+        </div>
+
+    </div>
+
+
+    <div id="data3" class="mdui-container">
+        <h2 style="font-weight: 400;color: #354;padding-top: 10px;" class="mdui-text-center">全国植被数据展示</h2>
+        <div class="mdui-tab  mdui-tab-full-width" mdui-tab>
+            <a href="#map3-1">森林面积地图</a>
+            <a href="#map3-2">植被覆盖率地图</a>
+            <a href="#map3-3">人工林面积地图</a>
+            <button onclick="window.open('./forest.html')">植被覆盖率直方图</button>
+        </div>
+        <div id="map3-1">
+            <h2 class="mdui-text-center">森林面积地图</h2>
+            <div id="senlin-map"></div>
+        </div>
+        <div id="map3-2">
+            <h2 class="mdui-text-center">植被覆盖率地图</h2>
+            <div id="fugailv-map"></div>
+        </div>
+        <div id="map3-3">
+            <h2 class="mdui-text-center">人工林面积地图</h2>
+            <div id="rengonglin-map"></div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+<script type="text/javascript" src="./js/topojson.js"></script>
+<script src="./js/utils.js"></script>
+<script src="./js/line.js"></script>
+<script src="./js/chinaMap.js"></script>
+<script src="./js/calendar.js"></script>
+<script src="./js/init.js"></script>
+<script src="./js/weather.js"></script>
+<script src="./js/senlin.js"></script>
+<script src="./js/rengonglin.js"></script>
+<script src="./js/fugailv.js"></script>
+
+</html>

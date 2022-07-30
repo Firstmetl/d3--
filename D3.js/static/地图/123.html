@@ -1,0 +1,132 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>自定义select</title>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+    
+    #main {
+        position: relative;
+        width: 280px;
+        height: 42px;
+    }
+    
+    #content {
+        width: 280px;
+        height: 42px;
+        line-height: 42px;
+        padding-left: 10px;
+        background: rgb(255, 255, 255);
+        border-radius: 2px;
+        border: 1px solid rgb(221, 221, 221);
+        font-size: 16px;
+        font-family: MicrosoftYaHei;
+        color: rgb(51, 51, 51);
+        cursor: pointer;
+    }
+    
+    #selectImg {
+        position: absolute;
+        top: 13px;
+        right: 10px;
+        cursor: pointer;
+    }
+    
+    #selectItem {
+        display: none;
+        border: 1px solid #eee;
+        width: 290px;
+    }
+    
+    #selectItem ul {
+        list-style: none;
+    }
+    
+    #selectItem ul li {
+        height: 30px;
+        line-height: 30px;
+        padding-left: 10px;
+        cursor: pointer;
+    }
+    
+    #selectItem ul li:hover {
+        background-color: #f5f7fa;
+    }
+</style>
+
+<body>
+    <div id="main">
+        <div id="content">
+
+        </div>
+        <img id="selectImg" src="./icon_select.png" alt="">
+        <div id="selectItem">
+            <!--  <ul>
+            <li data-value="1">北京</li>
+            <li data-value="2">上海</li>
+            <li data-value="3">深圳</li>
+          </ul>-->
+        </div>
+    </div>
+
+</body>
+<script>
+    var data = [{
+        name: '北京',
+        value: '1'
+    }, {
+        name: '上海',
+        value: '2'
+    }, {
+        name: '广州',
+        value: '3'
+    }]
+    var content = document.getElementById('content');
+    var selectImg = document.getElementById('selectImg');
+    var selectItem = document.getElementById('selectItem');
+
+    var ul = document.createElement('ul');
+    selectItem.appendChild(ul);
+    for (var i = 0; i < data.length; i++) {
+        var li = document.createElement('li');
+        li.setAttribute('data-value', data[i].value);
+        li.innerText = data[i].name;
+        ul.appendChild(li);
+    }
+    /**
+     * 点击下拉箭头
+     */
+    selectImg.onclick = function() {
+        console.log(selectItem.style.display);
+        if (selectItem.style.display == 'none' || selectItem.style.display == '') {
+            selectItem.style.display = 'block';
+        } else {
+            selectItem.style.display = 'none';
+        }
+
+    }
+
+    content.onclick = function() {
+        if (selectItem.style.display == 'none' || selectItem.style.display == '') {
+            selectItem.style.display = 'block';
+        } else {
+            selectItem.style.display = 'none';
+        }
+    }
+
+    var lis = selectItem.getElementsByTagName('li');
+    for (var i = 0; i < lis.length; i++) {
+        lis[i].onclick = function() {
+            console.log(this.innerHTML, this.getAttribute('data-value'));
+            content.innerText = this.innerHTML;
+            selectItem.style.display = 'none';
+        }
+    }
+</script>
+
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人工林面积直方图</title>
+    <script src="js/d3.min.js"></script>
+</head>
+
+<body>
+    <svg width="2000" height="1000" id="mainsvg" class="svgs"></svg>
+    <script>
+        const data = [{
+            地区: '北京',
+            人工林面积: 43.48
+        }, {
+            地区: '天津',
+            人工林面积: 12.98
+        }, {
+            地区: '河北',
+            人工林面积: 263.54
+        }, {
+            地区: '山西',
+            人工林面积: 167.63
+        }, {
+            地区: '内蒙古自治区',
+            人工林面积: 600.01
+        }, {
+            地区: '辽宁',
+            人工林面积: 315.32
+        }, {
+            地区: '吉林',
+            人工林面积: 175.94
+        }, {
+            地区: '黑龙江',
+            人工林面积: 243.26
+        }, {
+            地区: '上海',
+            人工林面积: 8.9
+        }, {
+            地区: '江苏',
+            人工林面积: 150.83
+        }, {
+            地区: '浙江',
+            人工林面积: 244.69
+        }, {
+            地区: '安徽',
+            人工林面积: 232.91
+        }, {
+            地区: '福建',
+            人工林面积: 385.59
+        }, {
+            地区: '江西',
+            人工林面积: 368.7
+        }, {
+            地区: '山东',
+            人工林面积: 256.11
+        }, {
+            地区: '河南',
+            人工林面积: 245.78
+        }, {
+            地区: '湖北',
+            人工林面积: 197.42
+        }, {
+            地区: '湖南',
+            人工林面积: 501.51
+        }, {
+            地区: '广东',
+            人工林面积: 615.51
+        }, {
+            地区: '广西',
+            人工林面积: 733.53
+        }, {
+            地区: '海南',
+            人工林面积: 140.4
+        }, {
+            地区: '重庆',
+            人工林面积: 95.93
+        }, {
+            地区: '四川',
+            人工林面积: 502.22
+        }, {
+            地区: '贵州',
+            人工林面积: 315.45
+        }, {
+            地区: '云南',
+            人工林面积: 507.68
+        }, {
+            地区: '西藏',
+            人工林面积: 7.84
+        }, {
+            地区: '陕西',
+            人工林面积: 310.53
+        }, {
+            地区: '甘肃',
+            人工林面积: 126.56
+        }, {
+            地区: '青海',
+            人工林面积: 19.1
+        }, {
+            地区: '宁夏',
+            人工林面积: 43.55
+        }, {
+            地区: '新疆',
+            人工林面积: 121.42
+        }, ]
+        const svg = d3.select('#mainsvg');
+        const width = +svg.attr('width');
+        const height = +svg.attr('height')
+        const margin = {
+            top: 60,
+            bottom: 60,
+            left: 150,
+            right: 30
+        };
+        const innerWidth = width - margin.left - margin.right;
+        const innerHeight = height - margin.bottom - margin.top;
+
+        const yScale = d3.scaleLinear()
+            .domain([d3.max(data, d => d.人工林面积), 0])
+            .range([0, innerHeight]);
+        const xScale = d3.scaleBand()
+            .domain(data.map(d => d.地区))
+            .range([0, innerWidth])
+            .padding(0.1);
+        const g = svg.append('g').attr('id', 'maingroup')
+            .attr('transform', `translate(${margin.left},${margin.top})`);
+
+
+        const xAxis = d3.axisBottom(xScale);
+        g.append('g').call(xAxis).attr('transform', `translate(0,${innerHeight})`)
+            .selectAll("text")
+            .attr("dy", ".75em")
+            .attr('transform', 'rotate(-14)');;
+        const yAxis = d3.axisLeft(yScale);
+        g.append('g').call(yAxis);
+
+        data.forEach(d => {
+            g.append('rect')
+                .attr('height', innerHeight * d.人工林面积 / 733.53)
+                .attr('width', function(d) {
+                    return (height - margin.left - margin.right) / data.length
+                })
+                .attr('fill', 'blue')
+                .attr('opacity', 0.8)
+                .attr('x', xScale(d.地区) + 13)
+                .attr('y', innerHeight - innerHeight * d.人工林面积 / 733.53)
+                .on("mouseover", function(d, i) {
+                    d3.select(this)
+                        .attr("fill", "yellow");
+                })
+                .on("mouseout", function(d, i) {
+                    d3.select(this)
+                        .transition()
+                        .duration(500)
+                        .attr("fill", "blue");
+                });
+
+        });
+        g.selectAll('text1').data(data).enter()
+            .append('text')
+            .attr('fill', 'blue')
+            .attr('x', function(d, i) {
+                return 18 + (i * 58);
+            })
+            .attr('y', function(d) {
+                return innerHeight - d.人工林面积 * innerHeight / 733.53;
+            })
+            .attr('font-size', '1.5em')
+            .text(function(d) {
+                return d.人工林面积;
+            })
+
+        d3.selectAll('.tick text').attr('font-size', '2em')
+        g.append('text').text('人工林面积')
+            .attr('font-size', '3em')
+            .attr('fill', 'orange')
+            .attr('transform', `translate(${innerWidth / 2},0)`)
+            .attr('text-anchor', 'middle');
+        var datas = function(d) {
+            return data.人工林面积
+        }
+        console.log(datas);
+    </script>
+    <button type="button" onclick="mysort()">   排序  </button>
+</body>
+
+</html>
